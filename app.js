@@ -5,8 +5,6 @@ const container = document.getElementById('container')
 
 let frogLocation = (rows - 1) * columns + Math.floor(columns / 2)
 
-console.log(frogLocation)
-
 function initialLayout() {
     for (let i = 0 ; i < rows ; i++) {
         for (let j = 0 ; j < columns ; j++) {
@@ -63,9 +61,27 @@ function showCarRow1() {
         car1Rear += 15
         car2Rear = car1Rear + 5
     }
+}
 
-    
+function updateCarsRow1(){
+    const divs = container.children
+    for (let i = 9*columns - 1 ; i >= 8*columns ; i--) {
+        if (divs[i].classList.contains('car-front')) {
+            divs[i].classList.remove('car-front')
+            divs[i].classList.add('car-back')
+            if (i < 9*columns - 1) {
+                divs[i + 1].classList.remove('road')
+                divs[i + 1].classList.add('car-front')
+            }
+        }
+        else if (divs[i].classList.contains('car-back')) {
+            console.log(i - 8*columns, ' has rear')
+            divs[i].classList.remove('car-back')
+            divs[i].classList.add('road')
+        }
+    }    
 }
 
 initialLayout()
 showCarRow1()
+setInterval(updateCarsRow1, 100)
