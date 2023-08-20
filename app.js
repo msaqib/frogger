@@ -1,5 +1,5 @@
 const rows = 10
-const columns = 41
+const columns = 45
 
 const container = document.getElementById('container')
 
@@ -58,7 +58,7 @@ function showCarRow1() {
         divs[car2Rear + 1].classList.add('car-front')
         divs[car2Rear].classList.add('car-back')
 
-        car1Rear += 15
+        car1Rear += 13
         car2Rear = car1Rear + 5
     }
 }
@@ -69,13 +69,10 @@ function updateCarsRow1(){
         if (divs[i].classList.contains('car-front')) {
             divs[i].classList.remove('car-front')
             divs[i].classList.add('car-back')
-            if (i < 9*columns - 1) {
-                divs[i + 1].classList.remove('road')
-                divs[i + 1].classList.add('car-front')
-            }
+            divs[8*columns + (i + 1)%columns].classList.remove('road')
+            divs[8*columns + (i + 1)%columns].classList.add('car-front')
         }
         else if (divs[i].classList.contains('car-back')) {
-            console.log(i - 8*columns, ' has rear')
             divs[i].classList.remove('car-back')
             divs[i].classList.add('road')
         }
@@ -84,4 +81,4 @@ function updateCarsRow1(){
 
 initialLayout()
 showCarRow1()
-setInterval(updateCarsRow1, 100)
+setInterval(updateCarsRow1, 1000)
