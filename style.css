@@ -1,3 +1,108 @@
-#frog {
-    color: #327654;
+#container {
+    border: 1px solid black;
+    width: 820px;
+    height: 200px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div {
+    width: 20px;
+    height: 20px;
+}
+
+.car-front {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    position: relative;
+    border-radius: 0 5px 5px 0;
+}
+        
+.car-front::before {
+    content: '';
+    width: 5px;
+    height: 15px;
+    background-color: gray;
+    position: absolute;
+    top: 2px;
+    left: 5px;
+}
+.car-back {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    position: relative;
+    border-radius: 5px 0 0 5px;
+}
+.car-back::before {
+    content: '';
+    width: 5px;
+    height: 15px;
+    background-color: gray;
+    position: absolute;
+    top: 2px;
+    left: 5px;
+}
+.cabin {
+    width: 20px;
+    height: 20px;
+    background-color: #888;
+    border-radius: 5px;
+}
+.cargo {
+    width: 20px;
+    height: 20px;
+    background-color: #aaa;
+}
+
+.frog {
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden; /* To hide overflowed content */
+}
+.frog::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    left: 20%;
+}
+
+.frog::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    left: 60%;
+}
+
+.water {
+    background-color: #0000FF;
+    width:20px;
+    height: 20px;
+}
+
+.grass {
+    background-color: #00FF00;
+    width:20px;
+    height: 20px;
+}
+
+.road {
+    background-color: #555555;
+    width:20px;
+    height: 20px;   
 }
