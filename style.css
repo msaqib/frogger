@@ -106,3 +106,7 @@ div {
     width:20px;
     height: 20px;   
 }
+
+.log1, .log2, .log3, .log4, .log5, .log6, .log7 {
+    background-color: brown;
+}

@@ -87,34 +87,12 @@ function showCarRow2() {
 
 function updateCarsRow1(){
     const divs = container.children
-    for (let i = 9*columns - 1 ; i >= 8*columns ; i--) {
-        if (divs[i].classList.contains('car-front')) {
-            divs[i].classList.remove('car-front')
-            divs[i].classList.add('car-back')
-            divs[8*columns + (i + 1)%columns].classList.remove('road')
-            divs[8*columns + (i + 1)%columns].classList.add('car-front')
-        }
-        else if (divs[i].classList.contains('car-back')) {
-            divs[i].classList.remove('car-back')
-            divs[i].classList.add('road')
-        }
-    }    
+    rotateRight(divs, 8*columns, 9*columns-1)    
 }
 
 function updateCarsRow2(){
     const divs = container.children
-    for (let i = 7*columns ; i < 8*columns ; i++) {
-        if (divs[i].classList.contains('car-back')) {
-            divs[i].classList.remove('car-back')
-            divs[i].classList.add('car-front')
-            divs[7*columns + (i - 1)%columns].classList.remove('road')
-            divs[7*columns + (i - 1)%columns].classList.add('car-back')
-        }
-        else if (divs[i].classList.contains('car-front')) {
-            divs[i].classList.remove('car-front')
-            divs[i].classList.add('road')
-        }
-    }    
+    rotateLeft(divs, 7*columns, 8*columns - 1)
 }
 
 function showTruckRow1() {
@@ -153,30 +131,88 @@ function showTruckRow2() {
 
 function updateTruckRow1(){
     const divs = container.children
-    for (let i = 6*columns - 1 ; i < 7*columns ; i++) {
-        if (divs[i].classList.contains('cabin')) {
-            divs[i].classList.remove('cabin')
-            divs[i].classList.add('cargo')
-            divs[i+2].classList.remove('cargo')
-            divs[i+2].classList.add('road')
-            divs[6*columns + (i - 1)%columns].classList.remove('road')
-            divs[6*columns + (i - 1)%columns].classList.add('cabin')
-        }
-    }    
+    rotateLeft(divs, 6*columns, 7*columns - 1)    
 }
 
 function updateTruckRow2(){
     const divs = container.children
-    for (let i = 6*columns ; i >= 5*columns ; i--) {
-        if (divs[i].classList.contains('cabin')) {
-            divs[i].classList.remove('cabin')
-            divs[i].classList.add('cargo')
-            divs[i-2].classList.remove('cargo')
-            divs[i-2].classList.add('road')
-            divs[5*columns + (i + 1)%columns].classList.remove('road')
-            divs[5*columns + (i + 1)%columns].classList.add('cabin')
-        }
+    rotateRight(divs, 5*columns, 6*columns - 1)
+}
+function showLogRow1() {
+    const divs = container.children
+    let log1Rear = 0
+    let log2Rear = 22
+    for (let i = 1 ; i <= 7 ; i++) {
+        divs[columns + log1Rear + i - 1].classList.remove('water')
+        divs[columns + log1Rear + i - 1].classList.add('log'+i)
+    }
+    for (let i = 1 ; i <= 7 ; i++) {
+        divs[columns + log2Rear + i - 1].classList.remove('water')
+        divs[columns + log2Rear + i - 1].classList.add('log'+i)
+    }
+}
+
+function showLogRow2() {
+    const divs = container.children
+    let log1Rear = columns - 1
+    let log2Rear = columns - 1 - 22
+    for (let i = 1 ; i <= 7 ; i++) {
+        divs[2 * columns + log1Rear - i + 1].classList.remove('water')
+        divs[2 * columns + log1Rear - i + 1].classList.add('log'+i)
+    }
+    for (let i = 1 ; i <= 7 ; i++) {
+        divs[2 * columns + log2Rear - i + 1].classList.remove('water')
+        divs[2 * columns + log2Rear - i + 1].classList.add('log'+i)
+    }   
+}
+
+function showLogRow3() {
+    const divs = container.children
+    let log1Rear = 8
+    let log2Rear = 30
+    for (let i = 1 ; i <= 7 ; i++) {
+        divs[3*columns + log1Rear + i - 1].classList.remove('water')
+        divs[3*columns + log1Rear + i - 1].classList.add('log'+i)
+    }
+    for (let i = 1 ; i <= 7 ; i++) {
+        divs[3*columns + log2Rear + i - 1].classList.remove('water')
+        divs[3*columns + log2Rear + i - 1].classList.add('log'+i)
     }    
+}
+
+function updateLogRow1(){
+    const divs = container.children
+    rotateRight(divs, columns, 2*columns - 1)
+}
+
+function updateLogRow2(){
+    const divs = container.children
+    rotateLeft(divs, 2 * columns, 3*columns - 1)
+}
+
+function updateLogRow3(){
+    const divs = container.children
+    rotateRight(divs, 3*columns, 4*columns - 1)
+}
+
+function rotateRight(divs, start, end) {
+    const temp = divs[end].classList.item(0)
+    for (let i = end ; i > start ; i--) {
+        divs[i].classList.remove(divs[i].classList.item(0))
+        divs[i].classList.add(divs[i-1].classList.item(0))
+    }
+    divs[start].classList.remove(divs[start].classList.item(0))
+    divs[start].classList.add(temp)
+}
+
+function rotateLeft(divs, start, end) {
+    const temp = divs[start].classList.item(0)
+    for (let i = start ; i < end ; i++) {
+        divs[i].classList.remove(divs[i].classList.item(0))
+        divs[i].classList.add(divs[i+1].classList.item(0))
+    }
+    divs[end].classList.remove(divs[end].classList.item(0))
+    divs[end].classList.add(temp)
 }
 
 initialLayout()
@@ -184,7 +220,71 @@ showCarRow1()
 showCarRow2()
 showTruckRow1()
 showTruckRow2()
+
+showLogRow1()
+showLogRow2()
+showLogRow3()
+
 setInterval(updateTruckRow1, 1000)
 setInterval(updateTruckRow2, 1000)
 setInterval(updateCarsRow1, 1000)
 setInterval(updateCarsRow2, 500)
+setInterval(updateLogRow1, 500)
+setInterval(updateLogRow2, 500)
+setInterval(updateLogRow3, 500)
+
+document.addEventListener('keydown', moveFrog)
+
+function getRowType(index) {
+    const styles = ['grass', 'water', 'water', 'water', 'grass', 'road', 'road', 'road', 'road', 'grass']
+    const rowNumber = Math.floor(index / columns)
+    return styles[rowNumber]
+
+}
+
+function moveFrog(e) {
+    const divs = container.children
+    const key = event.key
+    let rowType = getRowType(frogLocation)
+    switch(key) {
+    case 'ArrowLeft':
+        if(frogLocation % columns !== 0) {
+            divs[frogLocation].classList.remove('frog')
+            divs[frogLocation].classList.add(rowType)
+            frogLocation--
+            divs[frogLocation].classList.remove(rowType)
+            divs[frogLocation].classList.add('frog')
+        }
+        break
+    case 'ArrowRight':
+        if(frogLocation % columns !== columns - 1) {
+            divs[frogLocation].classList.remove('frog')
+            divs[frogLocation].classList.add(rowType)
+            frogLocation++
+            divs[frogLocation].classList.remove(rowType)
+            divs[frogLocation].classList.add('frog')
+        }
+        break;
+    case 'ArrowUp':
+        if (Math.floor(frogLocation / columns) !== 0) {
+            divs[frogLocation].classList.remove('frog')
+            divs[frogLocation].classList.add(rowType)
+            frogLocation -= columns
+            rowType = getRowType(frogLocation)
+            divs[frogLocation].classList.remove(rowType)
+            divs[frogLocation].classList.add('frog')    
+        }
+        break;
+
+    case 'ArrowDown':
+        if (Math.floor(frogLocation / columns) !== (rows - 1)) {
+            divs[frogLocation].classList.remove('frog')
+            divs[frogLocation].classList.add(rowType)
+            frogLocation += columns
+            rowType = getRowType(frogLocation)
+            divs[frogLocation].classList.remove(rowType)
+            divs[frogLocation].classList.add('frog')    
+        }
+        break;
+    }
+}
