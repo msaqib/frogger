@@ -235,114 +235,7 @@ function setUpCarRow2() {
     }    
 }
 
-function showCarRow2() {
-    const divs = container.children
-
-    let car1Rear = 8*columns - 1
-    let car2Rear = car1Rear - 5
-
-    for (let i = 0 ; i < 3 ; i++) {
-        divs[car1Rear].classList.remove('road')
-        divs[car1Rear - 1].classList.remove('road')
-        divs[car1Rear - 1].classList.add('car-back')
-        divs[car1Rear].classList.add('car-front')
-
-        divs[car2Rear].classList.remove('road')
-        divs[car2Rear - 1].classList.remove('road')
-        divs[car2Rear - 1].classList.add('car-back')
-        divs[car2Rear].classList.add('car-front')
-
-        car1Rear -= 13
-        car2Rear = car1Rear - 5
-    }
-}
-
-function updateCarsRow1(){
-    const divs = container.children
-    // rotateRight(divs, 8*columns, 9*columns-1)    
-}
-
-function updateCarsRow2(){
-    const divs = container.children
-    rotateLeft(divs, 7*columns, 8*columns - 1)
-}
-
-function showTruckRow1() {
-    const divs = container.children
-
-    let truckRear = 6*columns
-    
-    for (let i = 0 ; i < 3 ; i++) {
-        divs[truckRear].classList.remove('road')
-        divs[truckRear + 1].classList.remove('road')
-        divs[truckRear + 2].classList.remove('road')
-        divs[truckRear + 2].classList.add('cargo')
-        divs[truckRear + 1].classList.add('cargo')
-        divs[truckRear].classList.add('cabin')
-
-        truckRear += 15
-    }
-}
-
-function showTruckRow2() {
-    const divs = container.children
-
-    let truckRear = 5*columns
-    
-    for (let i = 0 ; i < 3 ; i++) {
-        divs[truckRear].classList.remove('road')
-        divs[truckRear + 1].classList.remove('road')
-        divs[truckRear + 2].classList.remove('road')
-        divs[truckRear + 2].classList.add('cabin')
-        divs[truckRear + 1].classList.add('cargo')
-        divs[truckRear].classList.add('cargo')
-
-        truckRear += 15
-    }
-}
-
-function updateTruckRow1(){
-    const divs = container.children
-    rotateLeft(divs, 6*columns, 7*columns - 1)    
-}
-
-function updateTruckRow2(){
-    const divs = container.children
-    rotateRight(divs, 5*columns, 6*columns - 1)
-}
-
-function rotateRight(divs, start, end) {
-    const temp = divs[end].classList.item(0)
-    for (let i = end  ; i > start ; i--) {
-        divs[i].classList.remove(divs[i].classList.item(0))
-        divs[i].classList.add(divs[i-1].classList.item(0))
-    }
-    divs[start].classList.remove(divs[start].classList.item(0))
-    divs[start].classList.add(temp)
-}
-
-function rotateLeft(divs, start, end) {
-    const type = getRowType(start)
-    const temp = divs[start].classList.item(0)
-    for (let i = start ; i < end ; i++) {
-        divs[i].classList.remove(divs[i].classList.item(0))
-        if (divs[i+1].classList.item(0) !== 'frog') {
-            divs[i].classList.add(divs[i+1].classList.item(0))
-        }
-        else {
-            divs[i].classList.add(type)
-        }
-    }
-    divs[end].classList.remove(divs[end].classList.item(0))
-    divs[end].classList.add(temp)
-}
-
 initialLayout()
-
-// showCarRow1()
-// showCarRow2()
-//showTruckRow1()
-//showTruckRow2()
 
 let timers = []
 timers = [setInterval(updateLogsRows, 120), ...timers]
@@ -351,10 +244,6 @@ timers = [setInterval(displayTrucks, 50), ...timers]
 timers = [setInterval(updateTrucks, 120), ...timers]
 timers = [setInterval(displayCars, 50), ...timers]
 timers = [setInterval(updateCars, 80), ...timers]
-// timers = [setInterval(updateTruckRow2, 1000), ...timers]
-// timers = [setInterval(updateCarsRow1, 1000), ...timers]
-// timers = [setInterval(updateCarsRow2, 500), ...timers]
-//timers = [setInterval(updateLogRow2, 500), ...timers]
 timers = [setInterval(updateFrog, 50), ...timers]
 
 document.addEventListener('keydown', moveFrog)
