@@ -66,6 +66,7 @@ div {
     border-radius: 50%;
     position: relative;
     overflow: hidden; /* To hide overflowed content */
+    z-index:1000;
 }
 .frog::before {
     content: '';
@@ -93,18 +94,21 @@ div {
     background-color: #0000FF;
     width:20px;
     height: 20px;
+    z-index:-1;
 }
 
 .grass {
     background-color: #00FF00;
     width:20px;
     height: 20px;
+    z-index:-1;
 }
 
 .road {
     background-color: #555555;
     width:20px;
-    height: 20px;   
+    height: 20px;  
+    z-index: -1; 
 }
 
 .log {

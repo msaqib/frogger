@@ -136,7 +136,7 @@ function updateTruckRow1(){
 
 function updateTruckRow2(){
     const divs = container.children
-    // rotateRight(divs, 5*columns, 6*columns - 1)
+    rotateRight(divs, 5*columns, 6*columns - 1)
 }
 
 function showLogRow1() {
@@ -197,31 +197,10 @@ function updateLogRow3(){
 }
 
 function rotateRight(divs, start, end) {
-    const type = getRowType(start)
     const temp = divs[end].classList.item(0)
-    for (let i = end ; i > start ; i--) {
-        const temp = divs[i].classList
-        if (type === 'water') {
-            if (divs[i].classList.contains('frog')) {
-                frogLocation++;
-            }
-            else {
-                divs[i].classList.remove(divs[i].classList.item(0))    
-                divs[i].classList.add(divs[i-1].classList.item(0))
-                console.log(i, divs[i-1].classList, divs[i].classList)    
-            }
-            
-        }
-        else {
-            divs[i].classList.remove(divs[i].classList.item(0))
-            if (divs[i-1].classList.item(0) !== 'frog') {
-                divs[i].classList.add(divs[i-1].classList.item(0))
-            }
-            else {
-                divs[i].classList.add(type)
-            }    
-        }
-        
+    for (let i = end  ; i > start ; i--) {
+        divs[i].classList.remove(divs[i].classList.item(0))
+        divs[i].classList.add(divs[i-1].classList.item(0))
     }
     divs[start].classList.remove(divs[start].classList.item(0))
     divs[start].classList.add(temp)
@@ -277,7 +256,7 @@ function updateFrog() {
     }
     //console.log(rowType)
     //divs[frogLocation].classList.remove(rowType)
-    divs[frogLocation].classList.remove(divs[frogLocation].classList.item(0))
+    //divs[frogLocation].classList.remove(divs[frogLocation].classList.item(0))
     divs[frogLocation].classList.add('frog')
 }
 
