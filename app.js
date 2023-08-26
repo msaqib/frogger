@@ -7,11 +7,13 @@ let frogLocation = (rows - 1) * columns + Math.floor(columns / 2)
 
 const deadStyles = ['car-back', 'car-front', 'cabin', 'cargo']
 let logRow1 = [columns, columns + 22]
-let logRow2 = [2*columns - 1, 2*columns - 1 - 22]
-let logRow3 = [3*columns +8, 3*columns + 30]
+let logRow2 = [3*columns - 7, 3*columns - 7 - 22]
+let logRow3 = [3*columns + 8, 3*columns + 30]
+console.log(logRow2)
 
 function updateLogsRows() {
     updateLogsRowRight()
+    updateLogsRowLeftt()
 }
 
 function updateLogsRowRight() {
@@ -19,7 +21,6 @@ function updateLogsRowRight() {
 
     logRows.forEach(logRow => {
         const rowStart = Math.floor(logRow[0] / columns) * columns
-        console.log(logRow[0], rowStart)
         // Do we need to move the frog?
         logRow.forEach(l => {
             for (let i = l ; i < l + 7 ; i++) {
@@ -39,10 +40,39 @@ function updateLogsRowRight() {
     })
 }
 
-function refreshLogsRowsRight() {
+function updateLogsRowLeftt() {
+        console.log(logRow2)
+        const rowStart = Math.floor(logRow2[0] / columns) * columns
+        // Do we need to move the frog?
+        logRow2.forEach(l => {
+            for (let i = l ; i < l + 7 ; i++) {
+                if (rowStart + (i % columns) === frogLocation) {
+                    removeFrog()
+                    frogLocation = rowStart + ((frogLocation - 1) % columns)
+                    break
+                }
+            }
+        })    
+        for (let i = 0 ; i < logRow2.length; i++) {
+            const rowStart = Math.floor(logRow2[0] / columns) * columns
+            logRow2[i] = rowStart + (logRow2[i] - 1) % columns
+        }
+    
+}
+
+function refreshLogsRows() {
     removeLogs()
-    logRow1.forEach(l => displayLogRight(l))
-    logRow3.forEach(l => displayLogRight(l))
+    refreshLogsRowsRight()
+}
+
+function refreshLogsRowsRight() {
+    logRow1.forEach(l => displayLog(l))
+    logRow2.forEach(l => displayLog(l))
+    logRow3.forEach(l => displayLog(l))    
+}
+
+function refreshLogsRowsLeft() {
+    logRow2.forEach(l => displayLogLeft(l))
 }
 
 function removeLogs() {
@@ -57,17 +87,16 @@ function removeLogs() {
 function removeFrog() {
     const logDivs = document.querySelectorAll('div.frog');
 
-    // Iterate through the selected div elements and remove the "log" class
+    // Iterate through the selected div elements and remove the "frog" class
     logDivs.forEach(div => {
     div.classList.remove('frog');
     })
 }
 
-function displayLogRight(logRear) {
+function displayLog(logRear) {
     const divs = container.children
-    divs[logRear-1].classList.remove('log')
     const rowStart = Math.floor(logRear / columns) * columns
-    for (let i = logRear ; i < logRear + 7 ; i++) {
+    for (let i = logRear ; i < logRear + 7; i++) {
         divs[rowStart + (i % columns)].classList.add('log')
     }
 }
@@ -206,63 +235,6 @@ function updateTruckRow2(){
     rotateRight(divs, 5*columns, 6*columns - 1)
 }
 
-function showLogRow1() {
-    const divs = container.children
-    let log1Rear = 0
-    let log2Rear = 22
-    for (let i = 1 ; i <= 7 ; i++) {
-        divs[columns + log1Rear + i - 1].classList.remove('water')
-        divs[columns + log1Rear + i - 1].classList.add('log')
-    }
-    for (let i = 1 ; i <= 7 ; i++) {
-        divs[columns + log2Rear + i - 1].classList.remove('water')
-        divs[columns + log2Rear + i - 1].classList.add('log')
-    }
-}
-
-function showLogRow2() {
-    const divs = container.children
-    let log1Rear = columns - 1
-    let log2Rear = columns - 1 - 22
-    for (let i = 1 ; i <= 7 ; i++) {
-        divs[2 * columns + log1Rear - i + 1].classList.remove('water')
-        divs[2 * columns + log1Rear - i + 1].classList.add('log')
-    }
-    for (let i = 1 ; i <= 7 ; i++) {
-        divs[2 * columns + log2Rear - i + 1].classList.remove('water')
-        divs[2 * columns + log2Rear - i + 1].classList.add('log')
-    }   
-}
-
-function showLogRow3() {
-    const divs = container.children
-    let log1Rear = 8
-    let log2Rear = 30
-    for (let i = 1 ; i <= 7 ; i++) {
-        divs[3*columns + log1Rear + i - 1].classList.remove('water')
-        divs[3*columns + log1Rear + i - 1].classList.add('log')
-    }
-    for (let i = 1 ; i <= 7 ; i++) {
-        divs[3*columns + log2Rear + i - 1].classList.remove('water')
-        divs[3*columns + log2Rear + i - 1].classList.add('log')
-    }    
-}
-
-function updateLogRow1(){
-    const divs = container.children
-    // rotateRight(divs, columns, 2*columns - 1)
-}
-
-function updateLogRow2(){
-    const divs = container.children
-    rotateLeft(divs, 2 * columns, 3*columns - 1)
-}
-
-function updateLogRow3(){
-    const divs = container.children
-    rotateRight(divs, 3*columns, 4*columns - 1)
-}
-
 function rotateRight(divs, start, end) {
     const temp = divs[end].classList.item(0)
     for (let i = end  ; i > start ; i--) {
@@ -295,16 +267,14 @@ showCarRow2()
 showTruckRow1()
 showTruckRow2()
 
-//showLogRow2()
-
 let timers = []
 timers = [setInterval(updateLogsRows, 2000), ...timers]
-timers = [setInterval(refreshLogsRowsRight, 50), ...timers]
-timers = [setInterval(updateTruckRow1, 1000), ...timers]
-timers = [setInterval(updateTruckRow2, 1000), ...timers]
-timers = [setInterval(updateCarsRow1, 1000), ...timers]
-timers = [setInterval(updateCarsRow2, 500), ...timers]
-timers = [setInterval(updateLogRow2, 500), ...timers]
+timers = [setInterval(refreshLogsRows, 50), ...timers]
+// timers = [setInterval(updateTruckRow1, 1000), ...timers]
+// timers = [setInterval(updateTruckRow2, 1000), ...timers]
+// timers = [setInterval(updateCarsRow1, 1000), ...timers]
+// timers = [setInterval(updateCarsRow2, 500), ...timers]
+//timers = [setInterval(updateLogRow2, 500), ...timers]
 timers = [setInterval(updateFrog, 50), ...timers]
 
 document.addEventListener('keydown', moveFrog)
@@ -319,12 +289,8 @@ function updateFrog() {
         timers.forEach(t => {
                 clearInterval(t)
             })
+        document.removeEventListener('keydown', moveFrog)
     }
-    //item(0)
-    
-    //console.log('Updating at ', frogLocation)
-    //divs[frogLocation].classList.remove(rowType)
-    //divs[frogLocation].classList.remove(divs[frogLocation].classList.item(0))
     divs[frogLocation].classList.add('frog')
 }
 
