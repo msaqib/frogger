@@ -14,6 +14,35 @@ let logRow3 = [3*columns + 8, 3*columns + 30]
 let truckRow1 = [5*columns + 2, 5*columns + 17]
 let truckRow2 = [7*columns - 3, 7*columns - 1 - 17]
 
+let carRow1 = []
+let carRow2 = []
+
+function displayCars() {
+    removeCars()
+    carRow1.forEach( c => displayCarRight(c))
+    carRow2.forEach( c => displayCarRight(c))
+}
+
+function displayCarRight(rear) {
+    const divs = container.children
+    const rowStart = getRowIndex(rear)
+    divs[rear].className = 'car-back ' + divs[rear].className
+    divs[rowStart + (rear + 1) % columns].className = 'car-front ' + divs[rowStart + (rear + 1) % columns].className
+}
+
+function updateCars() {
+    updateCarsRight()
+    updateCarssLeft()
+}
+
+function updateCarsRight() {
+    carRow1 = carRow1.map(c => getRowIndex(c) + (c + 1) % columns)
+}
+
+function updateCarssLeft() {
+    carRow2 = carRow2.map(c => getRowIndex(c) + (c - 1) % columns)
+}
+
 function displayTruckRight(front) {
     const divs = container.children
     const rowStart = getRowIndex(front)
@@ -134,6 +163,11 @@ function removeFrog() {
     removeClass('frog')
 }
 
+function removeCars() {
+    removeClass('car-front')
+    removeClass('car-back')
+}
+
 function displayLog(logRear) {
     const divs = container.children
     const rowStart = getRowIndex(logRear)
@@ -167,6 +201,8 @@ function initialLayout() {
     setUpRows(4, 4, 'grass')        
     // Rows 6, 7, 8, and 9 are road
     setUpRows(5, 8, 'road')
+    // Set up the cars arrays
+    setUpCarRows()
 }
 
 function setUpRows(startingRow, endingRow, style) {
@@ -178,26 +214,25 @@ function setUpRows(startingRow, endingRow, style) {
     }
 }
 
-function showCarRow1() {
-    const divs = container.children
+function setUpCarRows() {
+    setUpCarRow1()
+    setUpCarRow2()
+}
 
+function setUpCarRow1() {
     let car1Rear = 8*columns
-    let car2Rear = car1Rear + 5
-
-    for (let i = 0 ; i < 3 ; i++) {
-        divs[car1Rear].classList.remove('road')
-        divs[car1Rear + 1].classList.remove('road')
-        divs[car1Rear + 1].classList.add('car-front')
-        divs[car1Rear].classList.add('car-back')
-
-        divs[car2Rear].classList.remove('road')
-        divs[car2Rear + 1].classList.remove('road')
-        divs[car2Rear + 1].classList.add('car-front')
-        divs[car2Rear].classList.add('car-back')
-
+    for (let i = 0 ; i < 3 ; i ++) {
+        carRow1 = [...carRow1, car1Rear, car1Rear + 5]
         car1Rear += 13
-        car2Rear = car1Rear + 5
-    }
+    }    
+}
+
+function setUpCarRow2() {
+    let car1Rear = 8*columns - 2
+    for (let i = 0 ; i < 3 ; i ++) {
+        carRow2 = [...carRow2, car1Rear, car1Rear - 5]
+        car1Rear -= 13
+    }    
 }
 
 function showCarRow2() {
@@ -303,16 +338,19 @@ function rotateLeft(divs, start, end) {
 }
 
 initialLayout()
-showCarRow1()
-showCarRow2()
+
+// showCarRow1()
+// showCarRow2()
 //showTruckRow1()
 //showTruckRow2()
 
 let timers = []
-timers = [setInterval(updateLogsRows, 2000), ...timers]
+timers = [setInterval(updateLogsRows, 120), ...timers]
 timers = [setInterval(refreshLogsRows, 50), ...timers]
 timers = [setInterval(displayTrucks, 50), ...timers]
-timers = [setInterval(updateTrucks, 2000), ...timers]
+timers = [setInterval(updateTrucks, 120), ...timers]
+timers = [setInterval(displayCars, 50), ...timers]
+timers = [setInterval(updateCars, 80), ...timers]
 // timers = [setInterval(updateTruckRow2, 1000), ...timers]
 // timers = [setInterval(updateCarsRow1, 1000), ...timers]
 // timers = [setInterval(updateCarsRow2, 500), ...timers]

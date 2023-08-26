@@ -15,6 +15,10 @@ div {
     margin-bottom:2px;
 }
 
+div.car-front, div.car-back {
+    background-color: #333;
+}
+
 .car-front {
     width: 20px;
     height: 20px;
