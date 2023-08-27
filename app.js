@@ -1,6 +1,12 @@
 const rows = 10
 const columns = 45
 
+let timeReamining = 200
+
+const timeReaminingSpan = document.getElementById('time')
+
+const result = document.getElementById('result')
+
 const container = document.getElementById('container')
 
 let frogLocation = (rows - 1) * columns + Math.floor(columns / 2)
@@ -80,7 +86,7 @@ function updateTrucksLeft() {
 
 function updateLogsRows() {
     updateLogsRowRight()
-    updateLogsRowLeftt()
+    updateLogsRowLeft()
 }
 
 function updateLogsRowRight() {
@@ -92,7 +98,6 @@ function updateLogsRowRight() {
         logRow.forEach(l => {
             for (let i = l ; i < l + 7 ; i++) {
                 if (rowStart + (i % columns) === frogLocation) {
-                    removeFrog()
                     frogLocation = rowStart + ((frogLocation + 1) % columns)
                     break
                 }
@@ -107,13 +112,12 @@ function updateLogsRowRight() {
     })
 }
 
-function updateLogsRowLeftt() {
+function updateLogsRowLeft() {
         const rowStart = getRowIndex(logRow2[0])
         // Do we need to move the frog?
         logRow2.forEach(l => {
             for (let i = l ; i < l + 7 ; i++) {
                 if (rowStart + (i % columns) === frogLocation) {
-                    removeFrog()
                     frogLocation = rowStart + ((frogLocation - 1) % columns)
                     break
                 }
@@ -126,18 +130,18 @@ function updateLogsRowLeftt() {
     
 }
 
-function refreshLogsRows() {
+function displayLogsRows() {
     removeLogs()
-    refreshLogsRowsRight()
+    displayLogsRowsRight()
 }
 
-function refreshLogsRowsRight() {
+function displayLogsRowsRight() {
     logRow1.forEach(l => displayLog(l))
     logRow2.forEach(l => displayLog(l))
     logRow3.forEach(l => displayLog(l))    
 }
 
-function refreshLogsRowsLeft() {
+function displayLogsRowsLeft() {
     logRow2.forEach(l => displayLogLeft(l))
 }
 
@@ -190,11 +194,6 @@ function initialLayout() {
     // Make the bottom row grass
     setUpRows(9, 9, 'grass')    
 
-    // Show the frog
-    const divs = container.children
-    divs[frogLocation].classList.remove('grass')
-    divs[frogLocation].classList.add('frog')
-
     // Rows 2, 3, and 4 are water
     setUpRows(1, 3, 'water')    
     // Row 5 is grass
@@ -203,6 +202,7 @@ function initialLayout() {
     setUpRows(5, 8, 'road')
     // Set up the cars arrays
     setUpCarRows()
+    timeReaminingSpan.innerHTML = timeReamining
 }
 
 function setUpRows(startingRow, endingRow, style) {
@@ -239,27 +239,43 @@ initialLayout()
 
 let timers = []
 timers = [setInterval(updateLogsRows, 120), ...timers]
-timers = [setInterval(refreshLogsRows, 50), ...timers]
+timers = [setInterval(displayLogsRows, 50), ...timers]
 timers = [setInterval(displayTrucks, 50), ...timers]
 timers = [setInterval(updateTrucks, 120), ...timers]
 timers = [setInterval(displayCars, 50), ...timers]
 timers = [setInterval(updateCars, 80), ...timers]
 timers = [setInterval(updateFrog, 50), ...timers]
+timers = [setInterval(updateTimeRemaining, 1000), ...timers]
 
 document.addEventListener('keydown', moveFrog)
 
+function updateTimeRemaining() {
+    timeReamining--
+    timeReaminingSpan.innerHTML = timeReamining
+}
+
 function updateFrog() {
+    removeFrog()
     divs = container.children
     const rowType = getRowType(frogLocation)
     const hit = deadStyles.some(style => divs[frogLocation].classList.contains(style))
     const water = divs[frogLocation].classList.contains('water') 
     const log = divs[frogLocation].classList.contains('log')
-    if (hit || (water && !log)) {
+    const won = frogLocation < columns
+    const timeout = timeReamining <= 0
+    if (timeout || won || hit || (water && !log)) {
         timers.forEach(t => {
                 clearInterval(t)
             })
         document.removeEventListener('keydown', moveFrog)
     }
+    if (won) {
+        result.innerHTML = 'You won'
+    }
+    else if (timeout || hit || (water && !log)) {
+        result.innerHTML = 'Game over'
+    }
+    
     divs[frogLocation].classList.add('frog')
 }
 
@@ -277,37 +293,27 @@ function getRowIndex(index) {
 function moveFrog(e) {
     const divs = container.children
     const key = event.key
-    let rowType = getRowType(frogLocation)
     switch(key) {
     case 'ArrowLeft':
         if(frogLocation % columns !== 0) {
-            divs[frogLocation].classList.remove('frog')
-            divs[frogLocation].classList.add(rowType)
             frogLocation--
         }
         break
     case 'ArrowRight':
         if(frogLocation % columns !== columns - 1) {
-            divs[frogLocation].classList.remove('frog')
-            divs[frogLocation].classList.add(rowType)
             frogLocation++
         }
         break;
     case 'ArrowUp':
         if (Math.floor(frogLocation / columns) !== 0) {
-            divs[frogLocation].classList.remove('frog')
-            divs[frogLocation].classList.add(rowType)
             frogLocation -= columns
         }
         break;
 
     case 'ArrowDown':
         if (Math.floor(frogLocation / columns) !== (rows - 1)) {
-            divs[frogLocation].classList.remove('frog')
-            divs[frogLocation].classList.add(rowType)
             frogLocation += columns
         }
         break;
     }
-    updateFrog()
 }

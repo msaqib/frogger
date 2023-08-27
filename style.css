@@ -1,3 +1,11 @@
+#outer {
+    position: relative;
+}
+#timer, #result {
+    width: 100vw;
+    text-align: left;
+}
+
 #container {
     border: 1px solid black;
     width: 900px;
@@ -5,6 +13,7 @@
     margin: 0 auto;
     overflow: hidden;
     position: relative;
+    top: 50px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -72,10 +81,13 @@ div.cargo {
     height: 20px;
 }
 
+div.frog {
+    background-color: green;
+}
+
 .frog {
     width: 20px;
     height: 20px;
-    background-color: green;
     border-radius: 50%;
     position: relative;
     overflow: hidden; /* To hide overflowed content */
